@@ -1,0 +1,44 @@
+		//     while ($row = mysqli_fetch_array($result)) {
+		// 	# code...
+		// 	$role = $row['role'];
+		// }
+
+		// if ($role == 'Admin') {
+		// 	# code...
+		// 	echo "admin";
+		// 	header('location: ../public/admin.php?logged=admin');
+		// } elseif ($role == 'Student') {
+		// 	# code...
+		// 	echo "student";
+		// 	header('location: ../public/student.php?logged=student');
+
+		// }
+
+
+
+		
+
+There is no 100% reliable way of checking the validity of an email address. There are a few things you can do to at least weed out obviously invalid addresses, though.
+
+The problems that arise with email addresses is actually very similar to those of snail mail. All three points below can also be used for sending snail mail (just change the DNS record with a physical address).
+
+1. Check that the address is formatted correctly
+
+It is very difficult to check the format of email addresses, but PHP has a validation filter that attempts to do it. The filter does not handle "comments and folding whitespace", but I doubt anyone will notice.
+
+if (filter_var($email, FILTER_VALIDATE_EMAIL) !== FALSE) {
+    echo 'Valid email address formatting!';
+}
+
+2. Check that the DNS record exists for the domain name
+
+If a DNS (Domain Name System) record exists then at least someone has set it up. It does not mean that there is an email server at the address, but if the address exists then it is more likely.
+
+$domain = substr($email, strpos($email, '@') + 1);
+if  (checkdnsrr($domain) !== FALSE) {
+    echo 'Domain is valid!';
+}
+
+3. Send a verification email to the address
+
+This is the most effective way of seeing if someone is at the other end of the email address. If a confirmation email is not responded to in an orderly fashion -- 3 hours for example -- then there is probably some problem with the address.
